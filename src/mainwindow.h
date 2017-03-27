@@ -59,12 +59,15 @@ private:
   // QLabel* in_progress_heading;
 
 
+  gca::triangular_mesh part_mesh;
+    
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;
   QPushButton* add_parallel_button;
   QPushButton* define_stock_button;
   QPushButton* generate_plan_button;
 
+  QVTKWidget* part_window;
   QVBoxLayout *main_part_layout;
   QVBoxLayout *vtk_layout;
 

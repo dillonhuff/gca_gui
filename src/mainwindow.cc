@@ -1,4 +1,5 @@
 #include <vtkSphereSource.h>
+#include <vtkRendererCollection.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -40,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
   auto renderer = vtkSmartPointer<vtkRenderer>::New();
   renderer->SetBackground(1, 1, 1);
 
-  QVTKWidget* part_window = new QVTKWidget(this, Qt::Widget);
+  part_window = new QVTKWidget(this, Qt::Widget);
   part_window->GetRenderWindow()->AddRenderer(renderer);
   part_window->show();
   part_window->update();
@@ -486,6 +487,23 @@ void MainWindow::load_stl() {
   QFileDialog dialog;
   if (dialog.exec()) {
     auto file_names = dialog.selectedFiles();
+
+    if (file_names.size() > 0) {
+      auto first = file_names.front();
+      std::string fstr = first.toUtf8().constData();
+      part_mesh = parse_stl(fstr, 0.0001);
+
+      auto mesh_pd =
+	polydata_for_trimesh(part_mesh);
+      color_polydata(mesh_pd, 0, 255, 0);
+      auto mesh_actor = polydata_actor(mesh_pd);
+      
+      auto renderers = part_window->GetRenderWindow()->GetRenderers();
+      auto renderer = renderers->GetFirstRenderer();
+      renderer->AddActor(mesh_actor);
+      part_window->show();
+      part_window->update();
+    }
   }
 }
 
