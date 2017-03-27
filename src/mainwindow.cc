@@ -80,22 +80,24 @@ MainWindow::MainWindow(QWidget *parent)
 
   fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
 
-  auto mesh_pd = polydata_for_trimesh(mesh); //p.steps().front().arrangement().mesh("part")));
-  color_polydata(mesh_pd, 0, 255, 0);
-  auto mesh_actor = polydata_actor(mesh_pd);
-  
-  QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
-  auto renderer = vtkSmartPointer<vtkRenderer>::New();
-
-  renderer->SetBackground(1, 1, 1);
-  renderer->AddActor(mesh_actor);
-
-  vtk_window->GetRenderWindow()->AddRenderer(renderer);
-  vtk_window->show();
-  vtk_window->update();
-
   QHBoxLayout *layout = new QHBoxLayout;
+  for (auto& step : p.steps()) {
 
+    auto mesh_pd =
+      polydata_for_trimesh(step.arrangement().mesh("part"));
+    color_polydata(mesh_pd, 0, 255, 0);
+    auto mesh_actor = polydata_actor(mesh_pd);
+  
+    auto renderer = vtkSmartPointer<vtkRenderer>::New();
+    renderer->SetBackground(1, 1, 1);
+    renderer->AddActor(mesh_actor);
+
+    QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
+    vtk_window->GetRenderWindow()->AddRenderer(renderer);
+    vtk_window->show();
+    vtk_window->update();
+    layout->addWidget(vtk_window);
+  }
   // QPushButton* button2 = new QPushButton("Load STL");
   // accept_button = new QPushButton("Accept slice", this);
   // reject_button = new QPushButton("Reject slice", this);
@@ -120,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
   // completed->addWidget(completed_heading);
 
   // layout->addLayout(update_buttons);
-  layout->addWidget(vtk_window);
+  
   // layout->addLayout(in_progress);
   // layout->addLayout(completed);
 
