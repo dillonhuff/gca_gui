@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
 
-  QHBoxLayout *layout = new QHBoxLayout;
+  QVBoxLayout *layout = new QVBoxLayout;
   for (auto& step : p.steps()) {
 
     auto mesh_pd =
@@ -96,8 +96,10 @@ MainWindow::MainWindow(QWidget *parent)
     vtk_window->GetRenderWindow()->AddRenderer(renderer);
     vtk_window->show();
     vtk_window->update();
+    
     layout->addWidget(vtk_window);
   }
+  
   // QPushButton* button2 = new QPushButton("Load STL");
   // accept_button = new QPushButton("Accept slice", this);
   // reject_button = new QPushButton("Reject slice", this);
