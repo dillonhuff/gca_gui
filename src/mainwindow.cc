@@ -12,6 +12,7 @@
 #include "ui_mainwindow.h"
 
 #include <QHBoxLayout>
+#include <QFileDialog>
 
 using namespace gca;
 
@@ -58,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
   setCentralWidget(new QWidget);
   centralWidget()->setLayout(layout);
 
+  connect(load_stl_button, SIGNAL (released()), this, SLOT (load_stl()));
   connect(generate_plan_button, SIGNAL (released()), this, SLOT (generate_plan()));
   
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
@@ -479,6 +481,13 @@ MainWindow::MainWindow(QWidget *parent)
 //     renderer->AddActor(p_act);
 //   }
 // }
+
+void MainWindow::load_stl() {
+  QFileDialog dialog;
+  if (dialog.exec()) {
+    auto file_names = dialog.selectedFiles();
+  }
+}
 
 void MainWindow::generate_plan() {
   vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));

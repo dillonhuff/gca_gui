@@ -30,6 +30,7 @@ public:
 
 private slots:
   void generate_plan();
+  void load_stl();
 
   // void handle_accept();
   // void handle_reject();
