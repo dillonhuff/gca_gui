@@ -54,9 +54,9 @@ private:
   // QLabel* in_progress_heading;
 
 
-  // QPushButton* accept_button;
-  // QPushButton* reject_button;
-  // QPushButton* set_done_button;
+  QPushButton* accept_button;
+  QPushButton* reject_button;
+  QPushButton* set_done_button;
 
   // void update_active_mesh(const gca::triangular_mesh& m);
   // void update_active_plane(const gca::plane p);

@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
 
-  QVBoxLayout *layout = new QVBoxLayout;
+  QVBoxLayout *vtk_layout = new QVBoxLayout;
   for (auto& step : p.steps()) {
 
     auto mesh_pd =
@@ -97,19 +97,19 @@ MainWindow::MainWindow(QWidget *parent)
     vtk_window->show();
     vtk_window->update();
     
-    layout->addWidget(vtk_window);
+    vtk_layout->addWidget(vtk_window);
   }
-  
-  // QPushButton* button2 = new QPushButton("Load STL");
-  // accept_button = new QPushButton("Accept slice", this);
-  // reject_button = new QPushButton("Reject slice", this);
-  // set_done_button = new QPushButton("Done with part", this);
 
-  // QVBoxLayout* update_buttons = new QVBoxLayout();
-  // update_buttons->addWidget(button2);
-  // update_buttons->addWidget(accept_button);
-  // update_buttons->addWidget(reject_button);
-  // update_buttons->addWidget(set_done_button);
+  QPushButton* button2 = new QPushButton("Load STL");
+  accept_button = new QPushButton("Accept slice", this);
+  reject_button = new QPushButton("Reject slice", this);
+  set_done_button = new QPushButton("Done with part", this);
+
+  QVBoxLayout* update_buttons = new QVBoxLayout();
+  update_buttons->addWidget(button2);
+  update_buttons->addWidget(accept_button);
+  update_buttons->addWidget(reject_button);
+  update_buttons->addWidget(set_done_button);
 
   // in_progress_heading = new QLabel();
   // in_progress_heading->setText("In Progress");
@@ -123,8 +123,9 @@ MainWindow::MainWindow(QWidget *parent)
   // QVBoxLayout* completed = new QVBoxLayout();
   // completed->addWidget(completed_heading);
 
-  // layout->addLayout(update_buttons);
-  
+  QHBoxLayout* layout = new QHBoxLayout;
+  layout->addLayout(update_buttons);
+  layout->addLayout(vtk_layout);
   // layout->addLayout(in_progress);
   // layout->addLayout(completed);
 
