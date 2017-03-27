@@ -55,8 +55,6 @@ private:
   // std::vector<filletable_part> in_progress_fillets;
   // std::vector<filletable_part> finished_fillets;
 
-  // QVTKWidget* vtk_window;
-
   // QLabel* in_progress_heading;
 
 
@@ -66,6 +64,7 @@ private:
   QPushButton* define_stock_button;
   QPushButton* generate_plan_button;
 
+  QVBoxLayout *main_part_layout;
   QVBoxLayout *vtk_layout;
 
   // void update_active_mesh(const gca::triangular_mesh& m);

@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
   define_vice_button = new QPushButton("Define vice", this);
   add_parallel_button = new QPushButton("Add parallel plate", this);
   define_stock_button = new QPushButton("Define stock", this);
-  generate_plan_button = new QPushButton("generate_plan", this);
+  generate_plan_button = new QPushButton("Create plan", this);
 
   QVBoxLayout* update_buttons = new QVBoxLayout();
   update_buttons->addWidget(load_stl_button);
@@ -35,22 +35,22 @@ MainWindow::MainWindow(QWidget *parent)
   update_buttons->addWidget(define_stock_button);
   update_buttons->addWidget(generate_plan_button);
 
-  // in_progress_heading = new QLabel();
-  // in_progress_heading->setText("In Progress");
+  main_part_layout = new QVBoxLayout;
+  auto renderer = vtkSmartPointer<vtkRenderer>::New();
+  renderer->SetBackground(1, 1, 1);
 
-  // QVBoxLayout* in_progress = new QVBoxLayout();
-  // in_progress->addWidget(in_progress_heading);
-
-  // QLabel* completed_heading = new QLabel();
-  // completed_heading->setText("Completed");
-
-  // QVBoxLayout* completed = new QVBoxLayout();
-  // completed->addWidget(completed_heading);
+  QVTKWidget* part_window = new QVTKWidget(this, Qt::Widget);
+  part_window->GetRenderWindow()->AddRenderer(renderer);
+  part_window->show();
+  part_window->update();
+    
+  main_part_layout->addWidget(part_window);
 
   vtk_layout = new QVBoxLayout;
 
   QHBoxLayout* layout = new QHBoxLayout;
   layout->addLayout(update_buttons);
+  layout->addLayout(main_part_layout);
   layout->addLayout(vtk_layout);
   // layout->addLayout(in_progress);
   // layout->addLayout(completed);
