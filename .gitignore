@@ -1,0 +1,16 @@
+build/
+.DS_Store
+CMakeCache.txt
+CMakeFiles/
+all-tests
+all-tests_automoc.cpp
+cmake/
+cmake_install.cmake
+Makefile
+example.app/
+example_automoc.cpp
+libpartslice.a
+moc_mainwindow.cpp
+partslice_window.cpp
+partslice_automoc.cpp
+ui_mainwindow.h
