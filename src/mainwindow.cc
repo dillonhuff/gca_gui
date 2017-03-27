@@ -540,7 +540,6 @@ void MainWindow::generate_plan() {
 
   fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
 
-  vtk_layout = new QVBoxLayout;
   for (auto& step : p.steps()) {
 
     auto mesh_pd =
