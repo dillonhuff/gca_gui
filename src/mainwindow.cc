@@ -18,98 +18,22 @@ using namespace gca;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent) {
 
-  arena_allocator a;
-  set_system_allocator(&a);
+  set_system_allocator(&alloc);
 
-  vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
-  std::vector<plate_height> plates{0.1, 0.3, 0.7};
-  fixtures fixes(test_vice, plates);
-
-  workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
-
-  tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
-  t1.set_cut_diameter(0.25);
-  t1.set_cut_length(0.6);
-
-  t1.set_shank_diameter(3.0 / 8.0);
-  t1.set_shank_length(0.3);
-
-  t1.set_holder_diameter(2.5);
-  t1.set_holder_length(3.5);
-    
-  tool t2(0.5, 3.0, 4, HSS, FLAT_NOSE);
-  t2.set_cut_diameter(0.5);
-  t2.set_cut_length(0.3);
-
-  t2.set_shank_diameter(0.5);
-  t2.set_shank_length(0.5);
-
-  t2.set_holder_diameter(2.5);
-  t2.set_holder_length(3.5);
-
-  tool t3{0.2334, 3.94, 4, HSS, FLAT_NOSE};
-  t3.set_cut_diameter(0.05);
-  t3.set_cut_length(1.2);
-
-  t3.set_shank_diameter(0.5);
-  t3.set_shank_length(0.05);
-
-  t3.set_holder_diameter(2.5);
-  t3.set_holder_length(3.5);
-
-  // Ridiculous tool used to test feasability
-  tool t4{1.5, 3.94, 4, HSS, FLAT_NOSE};
-  t4.set_cut_diameter(1.5);
-  t4.set_cut_length(2.2);
-
-  t4.set_shank_diameter(0.5);
-  t4.set_shank_length(0.05);
-
-  t4.set_holder_diameter(2.5);
-  t4.set_holder_length(3.5);
-    
-  vector<tool> tools{t1, t2, t3, t4};
-
-  string part_path = "/Users/dillon/CppWorkspace/gca/test/stl-files/onshape_parts//Part Studio 1 - Part 1(29).stl";
-  auto mesh = parse_stl(part_path, 0.001);
-
-  box bounding = mesh.bounding_box();
-
-  cout << "Bounding box = " << endl;
-  cout << bounding << endl;
-
-  fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
-
-  QVBoxLayout *vtk_layout = new QVBoxLayout;
-  for (auto& step : p.steps()) {
-
-    auto mesh_pd =
-      polydata_for_trimesh(step.arrangement().mesh("part"));
-    color_polydata(mesh_pd, 0, 255, 0);
-    auto mesh_actor = polydata_actor(mesh_pd);
-  
-    auto renderer = vtkSmartPointer<vtkRenderer>::New();
-    renderer->SetBackground(1, 1, 1);
-    renderer->AddActor(mesh_actor);
-
-    QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
-    vtk_window->GetRenderWindow()->AddRenderer(renderer);
-    vtk_window->show();
-    vtk_window->update();
-    
-    vtk_layout->addWidget(vtk_window);
-  }
-
-  QPushButton* button2 = new QPushButton("Load STL");
-  accept_button = new QPushButton("Accept slice", this);
-  reject_button = new QPushButton("Reject slice", this);
-  set_done_button = new QPushButton("Done with part", this);
+  QPushButton* load_stl_button = new QPushButton("Load STL");
+  add_tool_button = new QPushButton("Add tool", this);
+  define_vice_button = new QPushButton("Define vice", this);
+  add_parallel_button = new QPushButton("Add parallel plate", this);
+  define_stock_button = new QPushButton("Define stock", this);
+  generate_plan_button = new QPushButton("generate_plan", this);
 
   QVBoxLayout* update_buttons = new QVBoxLayout();
-  update_buttons->addWidget(button2);
-  update_buttons->addWidget(accept_button);
-  update_buttons->addWidget(reject_button);
-  update_buttons->addWidget(set_done_button);
+  update_buttons->addWidget(load_stl_button);
+  update_buttons->addWidget(add_tool_button);
+  update_buttons->addWidget(define_vice_button);
+  update_buttons->addWidget(add_parallel_button);
+  update_buttons->addWidget(define_stock_button);
+  update_buttons->addWidget(generate_plan_button);
 
   // in_progress_heading = new QLabel();
   // in_progress_heading->setText("In Progress");
@@ -123,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
   // QVBoxLayout* completed = new QVBoxLayout();
   // completed->addWidget(completed_heading);
 
+  vtk_layout = new QVBoxLayout;
+
   QHBoxLayout* layout = new QHBoxLayout;
   layout->addLayout(update_buttons);
   layout->addLayout(vtk_layout);
@@ -132,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
   setCentralWidget(new QWidget);
   centralWidget()->setLayout(layout);
 
+  connect(generate_plan_button, SIGNAL (released()), this, SLOT (generate_plan()));
+  
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
   // connect(reject_button, SIGNAL (released()), this, SLOT (handle_reject()));
   // connect(set_done_button, SIGNAL (released()), this, SLOT (handle_set_done()));
@@ -551,6 +479,88 @@ MainWindow::MainWindow(QWidget *parent)
 //     renderer->AddActor(p_act);
 //   }
 // }
+
+void MainWindow::generate_plan() {
+  vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
+  std::vector<plate_height> plates{0.1, 0.3, 0.7};
+  fixtures fixes(test_vice, plates);
+
+  workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
+
+  tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
+  t1.set_cut_diameter(0.25);
+  t1.set_cut_length(0.6);
+
+  t1.set_shank_diameter(3.0 / 8.0);
+  t1.set_shank_length(0.3);
+
+  t1.set_holder_diameter(2.5);
+  t1.set_holder_length(3.5);
+    
+  tool t2(0.5, 3.0, 4, HSS, FLAT_NOSE);
+  t2.set_cut_diameter(0.5);
+  t2.set_cut_length(0.3);
+
+  t2.set_shank_diameter(0.5);
+  t2.set_shank_length(0.5);
+
+  t2.set_holder_diameter(2.5);
+  t2.set_holder_length(3.5);
+
+  tool t3{0.2334, 3.94, 4, HSS, FLAT_NOSE};
+  t3.set_cut_diameter(0.05);
+  t3.set_cut_length(1.2);
+
+  t3.set_shank_diameter(0.5);
+  t3.set_shank_length(0.05);
+
+  t3.set_holder_diameter(2.5);
+  t3.set_holder_length(3.5);
+
+  // Ridiculous tool used to test feasability
+  tool t4{1.5, 3.94, 4, HSS, FLAT_NOSE};
+  t4.set_cut_diameter(1.5);
+  t4.set_cut_length(2.2);
+
+  t4.set_shank_diameter(0.5);
+  t4.set_shank_length(0.05);
+
+  t4.set_holder_diameter(2.5);
+  t4.set_holder_length(3.5);
+    
+  vector<tool> tools{t1, t2, t3, t4};
+
+  string part_path = "/Users/dillon/CppWorkspace/gca/test/stl-files/onshape_parts//Part Studio 1 - Part 1(29).stl";
+  auto mesh = parse_stl(part_path, 0.001);
+
+  box bounding = mesh.bounding_box();
+
+  cout << "Bounding box = " << endl;
+  cout << bounding << endl;
+
+  fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
+
+  vtk_layout = new QVBoxLayout;
+  for (auto& step : p.steps()) {
+
+    auto mesh_pd =
+      polydata_for_trimesh(step.arrangement().mesh("part"));
+    color_polydata(mesh_pd, 0, 255, 0);
+    auto mesh_actor = polydata_actor(mesh_pd);
+  
+    auto renderer = vtkSmartPointer<vtkRenderer>::New();
+    renderer->SetBackground(1, 1, 1);
+    renderer->AddActor(mesh_actor);
+
+    QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
+    vtk_window->GetRenderWindow()->AddRenderer(renderer);
+    vtk_window->show();
+    vtk_window->update();
+    
+    vtk_layout->addWidget(vtk_window);
+  }
+
+}
 
 MainWindow::~MainWindow() {
 }

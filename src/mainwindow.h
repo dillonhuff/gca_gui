@@ -9,12 +9,15 @@
 #include <QMainWindow>
 #include <QScopedPointer>
 #include <QVTKWidget.h>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 
 #include "geometry/plane.h"
 #include "geometry/mesh_operations.h"
 #include "geometry/triangular_mesh.h"
+#include "utils/arena_allocator.h"
+
 //#include "part_slicing.h"
 
 class MainWindow : public QMainWindow {
@@ -22,16 +25,19 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow(QWidget *parent = 0);
+
     virtual ~MainWindow();
 
-
 private slots:
+  void generate_plan();
+
   // void handle_accept();
   // void handle_reject();
   // void handle_set_done();
 
 private:
 
+  gca::arena_allocator alloc;
   // vtkSmartPointer<vtkRenderer> renderer;
   // vtkSmartPointer<vtkActor> active_plane_actor;
   // vtkSmartPointer<vtkActor> active_mesh_actor;
@@ -54,9 +60,13 @@ private:
   // QLabel* in_progress_heading;
 
 
-  QPushButton* accept_button;
-  QPushButton* reject_button;
-  QPushButton* set_done_button;
+  QPushButton* add_tool_button;
+  QPushButton* define_vice_button;
+  QPushButton* add_parallel_button;
+  QPushButton* define_stock_button;
+  QPushButton* generate_plan_button;
+
+  QVBoxLayout *vtk_layout;
 
   // void update_active_mesh(const gca::triangular_mesh& m);
   // void update_active_plane(const gca::plane p);
