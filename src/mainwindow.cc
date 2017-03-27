@@ -463,7 +463,7 @@ void MainWindow::load_stl() {
 }
 
 void MainWindow::add_tool() {
-  AddToolDialog dialog;
+  ToolWizard dialog;
   if (dialog.exec()) {
     auto tool = dialog.defined_tool();
     toolset.push_back(tool);

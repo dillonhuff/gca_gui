@@ -12,7 +12,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QDialog>
+#include <QWizard>
+#include <QLineEdit>
 
 #include "backend/tool.h"
 #include "geometry/plane.h"
@@ -22,11 +23,45 @@
 
 //#include "part_slicing.h"
 
-class AddToolDialog : public QDialog {
+class ToolPage : public QWizardPage
+{
+    Q_OBJECT
+
 public:
-  AddToolDialog() {
-    
+    ToolPage(QWidget *parent = 0)
+      : QWizardPage(parent) {
+      setTitle(tr("Toolduction"));
+
+      tool_cut_diameter = new QLineEdit;
+      QVBoxLayout *layout = new QVBoxLayout;
+      layout->addWidget(tool_cut_diameter);
+      setLayout(layout);
+    }
+  
+private:
+  QLineEdit* tool_cut_diameter;
+
+};
+
+
+class ToolWizard : public QWizard {
+public:
+  ToolWizard() {
+    addPage(new ToolPage);
   }
+
+  void accept() {
+    // QByteArray className = field("className").toByteArray();
+    // QByteArray baseClass = field("baseClass").toByteArray();
+    // QByteArray macroName = field("macroName").toByteArray();
+    // QByteArray baseInclude = field("baseInclude").toByteArray();
+
+    // QString outputDir = field("outputDir").toString();
+    // QString header = field("header").toString();
+    // QString implementation = field("implementation").toString();
+    // ...
+      QDialog::accept();
+  }  
 
   gca::tool defined_tool() const {
     gca::tool t4{1.5, 3.94, 4, gca::HSS, gca::FLAT_NOSE};
