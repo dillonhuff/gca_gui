@@ -15,27 +15,7 @@
 #include "geometry/plane.h"
 #include "geometry/mesh_operations.h"
 #include "geometry/triangular_mesh.h"
-#include "part_slicing.h"
-
-// enum edit_mode { FILLET_MODE, SLICE_MODE, COMPLETE_MODE };
-
-// struct fillet_group {
-//   std::vector<std::vector<gca::shared_edge> > possible_fillets;
-// };
-
-// struct filletable_part {
-//   gca::triangular_mesh part;
-//   std::vector<fillet_group> fillet_groups;
-// };
-
-// struct active_fillet {
-//   filletable_part part;
-//   int fillet_group_index, fillet_index;
-
-//   const std::vector<gca::shared_edge>& current_fillet() const {
-//     return part.fillet_groups[fillet_group_index].possible_fillets[fillet_index];
-//   }
-// };
+//#include "part_slicing.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -51,8 +31,6 @@ private slots:
   // void handle_set_done();
 
 private:
-
-  // edit_mode current_mode;
 
   // vtkSmartPointer<vtkRenderer> renderer;
   // vtkSmartPointer<vtkActor> active_plane_actor;

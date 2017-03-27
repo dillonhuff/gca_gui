@@ -3,10 +3,9 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 
-#include "geometry/triangular_mesh_utils.h"
 #include "geometry/vtk_utils.h"
 #include "geometry/vtk_debug.h"
-#include "process_planning/surface_planning.h"
+#include "synthesis/mesh_to_gcode.h"
 #include "system/parse_stl.h"
 
 #include "mainwindow.h"
@@ -17,14 +16,85 @@
 using namespace gca;
 
 MainWindow::MainWindow(QWidget *parent)
-  : QMainWindow(parent)
-{
+  : QMainWindow(parent) {
 
-  // current_mode = SLICE_MODE;
+  arena_allocator a;
+  set_system_allocator(&a);
 
-  // vtk_window = new QVTKWidget(this, Qt::Widget);
+  vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
+  std::vector<plate_height> plates{0.1, 0.3, 0.7};
+  fixtures fixes(test_vice, plates);
 
-  // QHBoxLayout *layout = new QHBoxLayout;
+  workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
+
+  tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
+  t1.set_cut_diameter(0.25);
+  t1.set_cut_length(0.6);
+
+  t1.set_shank_diameter(3.0 / 8.0);
+  t1.set_shank_length(0.3);
+
+  t1.set_holder_diameter(2.5);
+  t1.set_holder_length(3.5);
+    
+  tool t2(0.5, 3.0, 4, HSS, FLAT_NOSE);
+  t2.set_cut_diameter(0.5);
+  t2.set_cut_length(0.3);
+
+  t2.set_shank_diameter(0.5);
+  t2.set_shank_length(0.5);
+
+  t2.set_holder_diameter(2.5);
+  t2.set_holder_length(3.5);
+
+  tool t3{0.2334, 3.94, 4, HSS, FLAT_NOSE};
+  t3.set_cut_diameter(0.05);
+  t3.set_cut_length(1.2);
+
+  t3.set_shank_diameter(0.5);
+  t3.set_shank_length(0.05);
+
+  t3.set_holder_diameter(2.5);
+  t3.set_holder_length(3.5);
+
+  // Ridiculous tool used to test feasability
+  tool t4{1.5, 3.94, 4, HSS, FLAT_NOSE};
+  t4.set_cut_diameter(1.5);
+  t4.set_cut_length(2.2);
+
+  t4.set_shank_diameter(0.5);
+  t4.set_shank_length(0.05);
+
+  t4.set_holder_diameter(2.5);
+  t4.set_holder_length(3.5);
+    
+  vector<tool> tools{t1, t2, t3, t4};
+
+  string part_path = "/Users/dillon/CppWorkspace/gca/test/stl-files/onshape_parts//Part Studio 1 - Part 1(29).stl";
+  auto mesh = parse_stl(part_path, 0.001);
+
+  box bounding = mesh.bounding_box();
+
+  cout << "Bounding box = " << endl;
+  cout << bounding << endl;
+
+  fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
+
+  auto mesh_pd = polydata_for_trimesh(mesh); //p.steps().front().arrangement().mesh("part")));
+  color_polydata(mesh_pd, 0, 255, 0);
+  auto mesh_actor = polydata_actor(mesh_pd);
+  
+  QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
+  auto renderer = vtkSmartPointer<vtkRenderer>::New();
+
+  renderer->SetBackground(1, 1, 1);
+  renderer->AddActor(mesh_actor);
+
+  vtk_window->GetRenderWindow()->AddRenderer(renderer);
+  vtk_window->show();
+  vtk_window->update();
+
+  QHBoxLayout *layout = new QHBoxLayout;
 
   // QPushButton* button2 = new QPushButton("Load STL");
   // accept_button = new QPushButton("Accept slice", this);
@@ -50,12 +120,12 @@ MainWindow::MainWindow(QWidget *parent)
   // completed->addWidget(completed_heading);
 
   // layout->addLayout(update_buttons);
-  // layout->addWidget(vtk_window);
+  layout->addWidget(vtk_window);
   // layout->addLayout(in_progress);
   // layout->addLayout(completed);
 
-  // setCentralWidget(new QWidget);
-  // centralWidget()->setLayout(layout);
+  setCentralWidget(new QWidget);
+  centralWidget()->setLayout(layout);
 
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
   // connect(reject_button, SIGNAL (released()), this, SLOT (handle_reject()));
