@@ -12,13 +12,39 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QDialog>
 
+#include "backend/tool.h"
 #include "geometry/plane.h"
 #include "geometry/mesh_operations.h"
 #include "geometry/triangular_mesh.h"
 #include "utils/arena_allocator.h"
 
 //#include "part_slicing.h"
+
+class AddToolDialog : public QDialog {
+public:
+  AddToolDialog() {
+    
+  }
+
+  gca::tool defined_tool() const {
+    gca::tool t4{1.5, 3.94, 4, gca::HSS, gca::FLAT_NOSE};
+    t4.set_cut_diameter(1.5);
+    t4.set_cut_length(2.2);
+
+    t4.set_shank_diameter(0.5);
+    t4.set_shank_length(0.05);
+
+    t4.set_holder_diameter(2.5);
+    t4.set_holder_length(3.5);
+
+    return t4;
+  }
+
+private slots:
+private:
+};
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -31,6 +57,7 @@ public:
 private slots:
   void generate_plan();
   void load_stl();
+  void add_tool();
 
   // void handle_accept();
   // void handle_reject();
@@ -60,6 +87,7 @@ private:
 
 
   gca::triangular_mesh part_mesh;
+  std::vector<gca::tool> toolset;
     
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;

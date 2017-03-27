@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   connect(load_stl_button, SIGNAL (released()), this, SLOT (load_stl()));
   connect(generate_plan_button, SIGNAL (released()), this, SLOT (generate_plan()));
+  connect(add_tool_button, SIGNAL (released()), this, SLOT (add_tool()));
+  
   
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
   // connect(reject_button, SIGNAL (released()), this, SLOT (handle_reject()));
@@ -106,33 +108,6 @@ MainWindow::MainWindow(QWidget *parent)
   // vtk_window->show();
 
 }
-
-// void MainWindow::handle_accept_slice() {
-//   auto part_nef = trimesh_to_nef_polyhedron(active_mesh);
-
-//   sliced_part sliced = cut_part_with_plane(active_plane, part_nef);
-
-//   part_split pos_split = sliced.pos_split;
-//   part_split neg_split = sliced.neg_split;
-
-//   add_to_queues(pos_split);
-//   add_to_queues(neg_split);
-  
-//   slice_next_part();
-// }
-
-// void MainWindow::handle_reject_slice() {
-//   if (slice_planes.size() == 0) {
-//     in_progress_heading->setText("ERROR: No further slice planes!");
-//     return;
-//   } 
-
-//   active_plane = slice_planes.back();
-//   slice_planes.pop_back();
-
-//   update_active_plane(active_plane);
-
-// }
 
 // std::string to_string(const point pt) {
 //   return "(" + std::to_string(pt.x) + ", " + std::to_string(pt.y) + ", " + std::to_string(pt.z) + ")";
@@ -463,26 +438,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 // }
 
-// void MainWindow::set_complete_mode() {
-//   current_mode = COMPLETE_MODE;
-
-//   clear_active_plane();
-//   clear_active_fillet();
-//   clear_active_mesh();
-
-//   in_progress_heading->setText("COMPLETE!!");
-
-//   color white(255, 255, 255);
-
-//   for (auto& p : finished_fillets) {
-//     auto p_data = polydata_for_trimesh(p.part);
-//     auto rc = random_color(white);
-//     color_polydata(p_data, rc.red(), rc.green(), rc.blue());
-//     auto p_act = polydata_actor(p_data);
-//     renderer->AddActor(p_act);
-//   }
-// }
-
 void MainWindow::load_stl() {
   QFileDialog dialog;
   if (dialog.exec()) {
@@ -507,6 +462,14 @@ void MainWindow::load_stl() {
   }
 }
 
+void MainWindow::add_tool() {
+  AddToolDialog dialog;
+  if (dialog.exec()) {
+    auto tool = dialog.defined_tool();
+    toolset.push_back(tool);
+  }
+}
+
 void MainWindow::generate_plan() {
   vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
   std::vector<plate_height> plates{0.1, 0.3, 0.7};
@@ -514,58 +477,59 @@ void MainWindow::generate_plan() {
 
   workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
 
-  tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
-  t1.set_cut_diameter(0.25);
-  t1.set_cut_length(0.6);
+  // tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
+  // t1.set_cut_diameter(0.25);
+  // t1.set_cut_length(0.6);
 
-  t1.set_shank_diameter(3.0 / 8.0);
-  t1.set_shank_length(0.3);
+  // t1.set_shank_diameter(3.0 / 8.0);
+  // t1.set_shank_length(0.3);
 
-  t1.set_holder_diameter(2.5);
-  t1.set_holder_length(3.5);
+  // t1.set_holder_diameter(2.5);
+  // t1.set_holder_length(3.5);
     
-  tool t2(0.5, 3.0, 4, HSS, FLAT_NOSE);
-  t2.set_cut_diameter(0.5);
-  t2.set_cut_length(0.3);
+  // tool t2(0.5, 3.0, 4, HSS, FLAT_NOSE);
+  // t2.set_cut_diameter(0.5);
+  // t2.set_cut_length(0.3);
 
-  t2.set_shank_diameter(0.5);
-  t2.set_shank_length(0.5);
+  // t2.set_shank_diameter(0.5);
+  // t2.set_shank_length(0.5);
 
-  t2.set_holder_diameter(2.5);
-  t2.set_holder_length(3.5);
+  // t2.set_holder_diameter(2.5);
+  // t2.set_holder_length(3.5);
 
-  tool t3{0.2334, 3.94, 4, HSS, FLAT_NOSE};
-  t3.set_cut_diameter(0.05);
-  t3.set_cut_length(1.2);
+  // tool t3{0.2334, 3.94, 4, HSS, FLAT_NOSE};
+  // t3.set_cut_diameter(0.05);
+  // t3.set_cut_length(1.2);
 
-  t3.set_shank_diameter(0.5);
-  t3.set_shank_length(0.05);
+  // t3.set_shank_diameter(0.5);
+  // t3.set_shank_length(0.05);
 
-  t3.set_holder_diameter(2.5);
-  t3.set_holder_length(3.5);
+  // t3.set_holder_diameter(2.5);
+  // t3.set_holder_length(3.5);
 
-  // Ridiculous tool used to test feasability
-  tool t4{1.5, 3.94, 4, HSS, FLAT_NOSE};
-  t4.set_cut_diameter(1.5);
-  t4.set_cut_length(2.2);
+  // // Ridiculous tool used to test feasability
+  // tool t4{1.5, 3.94, 4, HSS, FLAT_NOSE};
+  // t4.set_cut_diameter(1.5);
+  // t4.set_cut_length(2.2);
 
-  t4.set_shank_diameter(0.5);
-  t4.set_shank_length(0.05);
+  // t4.set_shank_diameter(0.5);
+  // t4.set_shank_length(0.05);
 
-  t4.set_holder_diameter(2.5);
-  t4.set_holder_length(3.5);
+  // t4.set_holder_diameter(2.5);
+  // t4.set_holder_length(3.5);
     
-  vector<tool> tools{t1, t2, t3, t4};
+  // vector<tool> tools{t1, t2, t3, t4};
 
-  string part_path = "/Users/dillon/CppWorkspace/gca/test/stl-files/onshape_parts//Part Studio 1 - Part 1(29).stl";
-  auto mesh = parse_stl(part_path, 0.001);
+  // string part_path = "/Users/dillon/CppWorkspace/gca/test/stl-files/onshape_parts//Part Studio 1 - Part 1(29).stl";
+  // auto mesh = parse_stl(part_path, 0.001);
 
-  box bounding = mesh.bounding_box();
+  box bounding = part_mesh.bounding_box();
 
   cout << "Bounding box = " << endl;
   cout << bounding << endl;
 
-  fabrication_plan p = make_fabrication_plan(mesh, fixes, tools, {workpiece_dims});
+  fabrication_plan p =
+    make_fabrication_plan(part_mesh, fixes, toolset, {workpiece_dims});
 
   for (auto& step : p.steps()) {
 
