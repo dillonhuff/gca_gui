@@ -15,13 +15,13 @@ class ToolWizard : public QDialog {
 public:
   ToolWizard() {
     tool_cut_diameter_label = new QLabel("Cut diameter:");
-    tool_cut_length_label = new QLabel;
+    tool_cut_length_label = new QLabel("Cut length:");
 
-    tool_shank_diameter_label = new QLabel;
-    tool_shank_length_label = new QLabel;
+    tool_shank_diameter_label = new QLabel("Shank diameter:");
+    tool_shank_length_label = new QLabel("Shank length:");
 
-    tool_holder_diameter_label = new QLabel;
-    tool_holder_length_label = new QLabel;
+    tool_holder_diameter_label = new QLabel("Holder diameter:");
+    tool_holder_length_label = new QLabel("Holder length:");
 
     tool_cut_diameter = new QLineEdit;
     tool_cut_length = new QLineEdit;
@@ -64,19 +64,47 @@ public:
     
     QVBoxLayout *layout = new QVBoxLayout;
 
-    QHBoxLayout* cut_diam_layout = new QHBoxLayout;
-    cut_diam_layout->addWidget(tool_cut_diameter_label);
-    cut_diam_layout->addWidget(tool_cut_diameter);
+    QHBoxLayout* cut_diameter_layout = new QHBoxLayout;
+    cut_diameter_layout->addWidget(tool_cut_diameter_label);
+    cut_diameter_layout->addWidget(tool_cut_diameter);
 
-    layout->addLayout(cut_diam_layout);
-    //layout->addWidget(tool_cut_diameter);
-    layout->addWidget(tool_cut_length);
+    layout->addLayout(cut_diameter_layout);
 
-    layout->addWidget(tool_shank_diameter);
-    layout->addWidget(tool_shank_length);
+    QHBoxLayout* cut_length_layout = new QHBoxLayout;
+    cut_length_layout->addWidget(tool_cut_length_label);
+    cut_length_layout->addWidget(tool_cut_length);
+    
+    layout->addLayout(cut_length_layout);
 
-    layout->addWidget(tool_holder_diameter);
-    layout->addWidget(tool_holder_length);
+    QHBoxLayout* shank_diameter_layout = new QHBoxLayout;
+    shank_diameter_layout->addWidget(tool_shank_diameter_label);
+    shank_diameter_layout->addWidget(tool_shank_diameter);
+
+    layout->addLayout(shank_diameter_layout);
+
+    QHBoxLayout* shank_length_layout = new QHBoxLayout;
+    shank_length_layout->addWidget(tool_shank_length_label);
+    shank_length_layout->addWidget(tool_shank_length);
+    
+    layout->addLayout(shank_length_layout);
+
+    QHBoxLayout* holder_diameter_layout = new QHBoxLayout;
+    holder_diameter_layout->addWidget(tool_holder_diameter_label);
+    holder_diameter_layout->addWidget(tool_holder_diameter);
+
+    layout->addLayout(holder_diameter_layout);
+
+    QHBoxLayout* holder_length_layout = new QHBoxLayout;
+    holder_length_layout->addWidget(tool_holder_length_label);
+    holder_length_layout->addWidget(tool_holder_length);
+    
+    layout->addLayout(holder_length_layout);
+    
+    // layout->addWidget(tool_shank_diameter);
+    // layout->addWidget(tool_shank_length);
+
+    // layout->addWidget(tool_holder_diameter);
+    // layout->addWidget(tool_holder_length);
 
     layout->addWidget(tool_type_group);
     layout->addWidget(material_group);
