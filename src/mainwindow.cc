@@ -63,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(load_stl_button, SIGNAL (released()), this, SLOT (load_stl()));
   connect(generate_plan_button, SIGNAL (released()), this, SLOT (generate_plan()));
   connect(add_tool_button, SIGNAL (released()), this, SLOT (add_tool()));
+  connect(add_parallel_button, SIGNAL (released()), this, SLOT (add_parallel()));
   
   
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
@@ -473,10 +474,21 @@ void MainWindow::add_tool() {
   }
 }
 
+void MainWindow::add_parallel() {
+  ParallelDialog dialog;
+  if (dialog.exec()) {
+    auto parallel = dialog.defined_height();
+    parallels.push_back(parallel);
+
+    cout << "Selected parallel = " << parallel << endl;
+    cout << "Number of parallels = " << parallels.size() << endl;
+  }
+}
+
 void MainWindow::generate_plan() {
   vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
-  std::vector<plate_height> plates{0.1, 0.3, 0.7};
-  fixtures fixes(test_vice, plates);
+  //std::vector<plate_height> plates{0.1, 0.3, 0.7};
+  fixtures fixes(test_vice, parallels);
 
   workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
 

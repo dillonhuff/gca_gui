@@ -18,8 +18,10 @@
 #include "geometry/plane.h"
 #include "geometry/mesh_operations.h"
 #include "geometry/triangular_mesh.h"
+#include "synthesis/fixture_analysis.h"
 #include "utils/arena_allocator.h"
 
+#include "parallel_dialog.h"
 #include "tool_page.h"
 
 class MainWindow : public QMainWindow {
@@ -34,6 +36,7 @@ private slots:
   void generate_plan();
   void load_stl();
   void add_tool();
+  void add_parallel();
 
   // void handle_accept();
   // void handle_reject();
@@ -64,6 +67,7 @@ private:
 
   gca::triangular_mesh part_mesh;
   std::vector<gca::tool> toolset;
+  std::vector<gca::plate_height> parallels;
     
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;
