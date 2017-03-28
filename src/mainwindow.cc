@@ -7,6 +7,7 @@
 #include "geometry/vtk_utils.h"
 #include "geometry/vtk_debug.h"
 #include "synthesis/mesh_to_gcode.h"
+#include "synthesis/visual_debug.h"
 #include "system/parse_stl.h"
 
 #include "mainwindow.h"
@@ -546,7 +547,16 @@ void MainWindow::generate_plan() {
   
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->SetBackground(1, 1, 1);
+
     renderer->AddActor(mesh_actor);
+
+    color white(255, 255, 255);
+    for (auto& tp : step.toolpaths()) {
+      auto tp_polydata = polydata_for_toolpath(tp);
+      color tp_color = random_color(white);
+      color_polydata(tp_polydata, tp_color.red(), tp_color.green(), tp_color.blue());
+      renderer->AddActor(polydata_actor(tp_polydata));
+    }
 
     QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
     vtk_window->GetRenderWindow()->AddRenderer(renderer);
