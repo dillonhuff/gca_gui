@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -9,14 +10,19 @@
 class ParallelDialog : public QDialog {
 public:
   ParallelDialog() {
+    parallel_height_label = new QLabel("Height:");
     parallel_height = new QLineEdit;
 
     done_button = new QPushButton("Done", this);
 
     connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
 
+    QHBoxLayout* parallel_height_layout = new QHBoxLayout;
+    parallel_height_layout->addWidget(parallel_height_label);
+    parallel_height_layout->addWidget(parallel_height);
+    
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(parallel_height);
+    layout->addLayout(parallel_height_layout);
 
     layout->addWidget(done_button);
     
@@ -32,6 +38,7 @@ public:
 private slots:
 
 private:
+  QLabel* parallel_height_label;
   QLineEdit* parallel_height;
 
   QPushButton* done_button;
