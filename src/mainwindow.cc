@@ -478,8 +478,9 @@ void MainWindow::add_parallel() {
   }
 }
 
-void MainWindow::postprocess(unsigned step_num) {
-  
+void MainWindow::postprocess() {
+  PostProcessButton* button =
+    qobject_cast<PostProcessButton*>(sender());
 }
 
 void MainWindow::generate_plan() {
