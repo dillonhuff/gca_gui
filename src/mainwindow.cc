@@ -4,12 +4,14 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 
+#include "backend/gcode_generation.h"
 #include "geometry/vtk_utils.h"
 #include "geometry/vtk_debug.h"
 #include "synthesis/mesh_to_gcode.h"
 #include "synthesis/visual_debug.h"
 #include "system/parse_stl.h"
 
+#include "gcode_dialog.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "parallel_dialog.h"
@@ -26,7 +28,8 @@ using namespace gca;
 MainWindow::MainWindow(QWidget *parent)
   : QMainWindow(parent),
     initial_stock(-1, -1, -1, gca::ACETAL),
-    test_vice(custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0))) {
+    test_vice(custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0))),
+    current_plan({}) {
 
   set_system_allocator(&alloc);
 
@@ -481,6 +484,17 @@ void MainWindow::add_parallel() {
 void MainWindow::postprocess() {
   PostProcessButton* button =
     qobject_cast<PostProcessButton*>(sender());
+
+  cout << "Clicked postprocess button " << button->num << endl;
+  const fabrication_setup& s = current_plan.steps()[button->num];
+  gcode_program prog =
+    s.gcode_for_toolpaths(emco_f1_code_no_TLC);
+
+  stringstream strs;
+  strs << prog.blocks << endl;
+
+  GCodeDialog gc(strs.str());
+  gc.exec();
 }
 
 void MainWindow::generate_plan() {
@@ -541,11 +555,11 @@ void MainWindow::generate_plan() {
   cout << "Bounding box = " << endl;
   cout << bounding << endl;
 
-  fabrication_plan p =
+  current_plan =
     make_fabrication_plan(part_mesh, fixes, toolset, {initial_stock});
 
   unsigned step_num = 0;
-  for (auto& step : p.steps()) {
+  for (auto& step : current_plan.steps()) {
 
     auto mesh_pd =
       polydata_for_trimesh(step.arrangement().mesh("part"));
@@ -574,7 +588,7 @@ void MainWindow::generate_plan() {
     connect(postprocess_button,
     	    SIGNAL (released()),
     	    this,
-    	    SLOT(postprocess));
+    	    SLOT(postprocess()));
 
     step_num++;
 

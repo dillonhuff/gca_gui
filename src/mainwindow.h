@@ -66,6 +66,7 @@ private:
   std::vector<gca::plate_height> parallels;
   gca::workpiece initial_stock;
   gca::vice test_vice;
+  gca::fabrication_plan current_plan;
     
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;

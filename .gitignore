@@ -16,3 +16,4 @@ partslice_automoc.cpp
 ui_mainwindow.h
 *~
 moc_tool_page.cpp
+moc_postprocess_button.cpp
