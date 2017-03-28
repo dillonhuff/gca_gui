@@ -19,16 +19,16 @@ public:
 
     material_group = new QGroupBox();
 
-    QRadioButton *radio1 = new QRadioButton(tr("&Aluminum"));
-    QRadioButton *radio2 = new QRadioButton(tr("R&Brass"));
-    QRadioButton *radio3 = new QRadioButton(tr("Ra&Acetal"));
+    aluminum_check = new QRadioButton(tr("&Aluminum"));
+    brass_check = new QRadioButton(tr("&Brass"));
+    acetal_check = new QRadioButton(tr("R&Acetal"));
 
-    radio1->setChecked(true);
+    aluminum_check->setChecked(true);
 
     QVBoxLayout *vbox = new QVBoxLayout;
-    vbox->addWidget(radio1);
-    vbox->addWidget(radio2);
-    vbox->addWidget(radio3);
+    vbox->addWidget(aluminum_check);
+    vbox->addWidget(brass_check);
+    vbox->addWidget(acetal_check);
     vbox->addStretch(1);
     material_group->setLayout(vbox);
 
@@ -38,9 +38,9 @@ public:
     layout->addWidget(stock_length);
     layout->addWidget(stock_width);
     layout->addWidget(stock_height);
-    layout->addWidget(done_button);
     layout->addWidget(material_group);
-    
+    layout->addWidget(done_button);
+
     setLayout(layout);
   }
 
@@ -67,6 +67,9 @@ private:
   QPushButton* done_button;
 
   QGroupBox* material_group;
-  
+
+  QRadioButton* aluminum_check;
+  QRadioButton* brass_check;
+  QRadioButton* acetal_check;
 };
 
