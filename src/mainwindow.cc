@@ -21,7 +21,9 @@
 using namespace gca;
 
 MainWindow::MainWindow(QWidget *parent)
-  : QMainWindow(parent), initial_stock(-1, -1, -1, gca::ACETAL) {
+  : QMainWindow(parent),
+    initial_stock(-1, -1, -1, gca::ACETAL),
+    test_vice(custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0))) {
 
   set_system_allocator(&alloc);
 
@@ -501,7 +503,7 @@ void MainWindow::add_parallel() {
 }
 
 void MainWindow::generate_plan() {
-  vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
+  //vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
   //std::vector<plate_height> plates{0.1, 0.3, 0.7};
   fixtures fixes(test_vice, parallels);
 

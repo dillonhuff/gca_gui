@@ -67,6 +67,7 @@ private:
   std::vector<gca::tool> toolset;
   std::vector<gca::plate_height> parallels;
   gca::workpiece initial_stock;
+  gca::vice test_vice;
     
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;
@@ -78,40 +79,6 @@ private:
   QVBoxLayout *main_part_layout;
   QVBoxLayout *vtk_layout;
 
-  // void update_active_mesh(const gca::triangular_mesh& m);
-  // void update_active_plane(const gca::plane p);
-  // void clear_active_plane();
-  // void clear_active_mesh();
-  // void clear_active_fillet();
-
-  // void slice_next_part();
-
-  // // Commands for slice mode
-  // void handle_accept_slice();
-  // void handle_reject_slice();
-  // void handle_set_done_slice();
-
-  // void add_to_queues(const gca::part_split& part);
-
-  // void add_to_filletables(const gca::part_split& part);
-
-  // // Commands for fillet mode
-  // void handle_accept_fillet();
-  // void handle_reject_fillet();
-  // void handle_set_done_fillet();
-
-  // void switch_to_fillet_mode();
-  // void fillet_next_part();
-  // void set_active_fillet(const active_fillet& af);
-  // void fillet_next();
-
-  //   // void set_active_fillet(const gca::triangular_mesh& part,
-  //   // 			 const std::vector<gca::shared_edge>& fillet);
-
-  // active_fillet next_active_fillet();
-
-  // // Commands for complete mode
-  // void set_complete_mode();
   
 };
 

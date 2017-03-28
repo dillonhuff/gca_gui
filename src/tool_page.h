@@ -10,27 +10,6 @@
 
 #include "backend/tool.h"
 
-class ToolPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-    ToolPage(QWidget *parent = 0)
-      : QWizardPage(parent) {
-      setTitle(tr("Toolduction"));
-
-      tool_cut_diameter = new QLineEdit;
-      QVBoxLayout *layout = new QVBoxLayout;
-      layout->addWidget(tool_cut_diameter);
-      setLayout(layout);
-    }
-  
-private:
-  QLineEdit* tool_cut_diameter;
-
-};
-
-
 class ToolWizard : public QDialog {
 public:
   ToolWizard() {
