@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGroupBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
@@ -13,6 +14,15 @@
 class ToolWizard : public QDialog {
 public:
   ToolWizard() {
+    tool_cut_diameter_label = new QLabel("Cut diameter:");
+    tool_cut_length_label = new QLabel;
+
+    tool_shank_diameter_label = new QLabel;
+    tool_shank_length_label = new QLabel;
+
+    tool_holder_diameter_label = new QLabel;
+    tool_holder_length_label = new QLabel;
+
     tool_cut_diameter = new QLineEdit;
     tool_cut_length = new QLineEdit;
 
@@ -53,7 +63,13 @@ public:
     tool_type_group->setLayout(ttb);
     
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(tool_cut_diameter);
+
+    QHBoxLayout* cut_diam_layout = new QHBoxLayout;
+    cut_diam_layout->addWidget(tool_cut_diameter_label);
+    cut_diam_layout->addWidget(tool_cut_diameter);
+
+    layout->addLayout(cut_diam_layout);
+    //layout->addWidget(tool_cut_diameter);
     layout->addWidget(tool_cut_length);
 
     layout->addWidget(tool_shank_diameter);
@@ -107,6 +123,15 @@ public:
 private slots:
 
 private:
+  QLabel* tool_cut_diameter_label;
+  QLabel* tool_cut_length_label;
+
+  QLabel* tool_shank_diameter_label;
+  QLabel* tool_shank_length_label;
+
+  QLabel* tool_holder_diameter_label;
+  QLabel* tool_holder_length_label;
+
   QLineEdit* tool_cut_diameter;
   QLineEdit* tool_cut_length;
 
