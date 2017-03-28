@@ -558,6 +558,10 @@ void MainWindow::generate_plan() {
       renderer->AddActor(polydata_actor(tp_polydata));
     }
 
+    auto vice_pd = polydata_for_vice(step.v);
+    auto vice_actor = polydata_actor(vice_pd);
+    renderer->AddActor(vice_actor);
+    
     QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
     vtk_window->GetRenderWindow()->AddRenderer(renderer);
     vtk_window->show();
