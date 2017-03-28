@@ -467,6 +467,8 @@ void MainWindow::add_tool() {
   if (dialog.exec()) {
     auto tool = dialog.defined_tool();
     toolset.push_back(tool);
+
+    cout << "Selected tool cut diam = " << tool.cut_diameter() << endl;
   }
 }
 

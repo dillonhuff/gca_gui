@@ -37,6 +37,7 @@ set(IDENTIFIER "com.example.Example")
 set(SOURCE_FILES
     src/main.cc
     src/mainwindow.cc
+    src/tool_page.cpp
 )
 
 add_project_meta(META_FILES_TO_INCLUDE)

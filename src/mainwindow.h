@@ -15,71 +15,12 @@
 #include <QWizard>
 #include <QLineEdit>
 
-#include "backend/tool.h"
 #include "geometry/plane.h"
 #include "geometry/mesh_operations.h"
 #include "geometry/triangular_mesh.h"
 #include "utils/arena_allocator.h"
 
-//#include "part_slicing.h"
-
-class ToolPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-    ToolPage(QWidget *parent = 0)
-      : QWizardPage(parent) {
-      setTitle(tr("Toolduction"));
-
-      tool_cut_diameter = new QLineEdit;
-      QVBoxLayout *layout = new QVBoxLayout;
-      layout->addWidget(tool_cut_diameter);
-      setLayout(layout);
-    }
-  
-private:
-  QLineEdit* tool_cut_diameter;
-
-};
-
-
-class ToolWizard : public QWizard {
-public:
-  ToolWizard() {
-    addPage(new ToolPage);
-  }
-
-  void accept() {
-    // QByteArray className = field("className").toByteArray();
-    // QByteArray baseClass = field("baseClass").toByteArray();
-    // QByteArray macroName = field("macroName").toByteArray();
-    // QByteArray baseInclude = field("baseInclude").toByteArray();
-
-    // QString outputDir = field("outputDir").toString();
-    // QString header = field("header").toString();
-    // QString implementation = field("implementation").toString();
-    // ...
-      QDialog::accept();
-  }  
-
-  gca::tool defined_tool() const {
-    gca::tool t4{1.5, 3.94, 4, gca::HSS, gca::FLAT_NOSE};
-    t4.set_cut_diameter(1.5);
-    t4.set_cut_length(2.2);
-
-    t4.set_shank_diameter(0.5);
-    t4.set_shank_length(0.05);
-
-    t4.set_holder_diameter(2.5);
-    t4.set_holder_length(3.5);
-
-    return t4;
-  }
-
-private slots:
-private:
-};
+#include "tool_page.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
