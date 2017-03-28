@@ -39,6 +39,19 @@ public:
     vbox->addStretch(1);
     material_group->setLayout(vbox);
     
+    tool_type_group = new QGroupBox();
+
+    flat_check = new QRadioButton(tr("&Flat nosed"));    
+    ball_check = new QRadioButton(tr("&Ball nosed"));
+
+    flat_check->setChecked(true);
+
+    QVBoxLayout *ttb = new QVBoxLayout;
+    ttb->addWidget(flat_check);
+    ttb->addWidget(ball_check);
+    ttb->addStretch(1);
+    tool_type_group->setLayout(ttb);
+    
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(tool_cut_diameter);
     layout->addWidget(tool_cut_length);
@@ -49,6 +62,7 @@ public:
     layout->addWidget(tool_holder_diameter);
     layout->addWidget(tool_holder_length);
 
+    layout->addWidget(tool_type_group);
     layout->addWidget(material_group);
 
     layout->addWidget(done_button);
@@ -63,9 +77,17 @@ public:
 
     return gca::CARBIDE;
   }
+
+  gca::tool_type read_tool_type() const {
+    if (flat_check->isChecked()) {
+      return gca::FLAT_NOSE;
+    }
+
+    return gca::BALL_NOSE;
+  }
   
   gca::tool defined_tool() const {
-    gca::tool t4{1.5, 3.94, 4, read_material(), gca::FLAT_NOSE};
+    gca::tool t4{1.5, 3.94, 4, read_material(), read_tool_type()}; //gca::FLAT_NOSE};
 
     std::string fstr = tool_cut_diameter->text().toUtf8().constData();
     t4.set_cut_diameter(std::stof(fstr));
@@ -100,6 +122,11 @@ private:
 
   QRadioButton* hss_check;
   QRadioButton* carbide_check;
+
+  QGroupBox* tool_type_group;
+
+  QRadioButton* flat_check;
+  QRadioButton* ball_check;
   
 };
 
