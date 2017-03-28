@@ -21,9 +21,6 @@
 #include "synthesis/fixture_analysis.h"
 #include "utils/arena_allocator.h"
 
-#include "parallel_dialog.h"
-#include "tool_page.h"
-
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -37,6 +34,7 @@ private slots:
   void load_stl();
   void add_tool();
   void add_parallel();
+  void define_stock();
 
   // void handle_accept();
   // void handle_reject();
@@ -68,6 +66,7 @@ private:
   gca::triangular_mesh part_mesh;
   std::vector<gca::tool> toolset;
   std::vector<gca::plate_height> parallels;
+  gca::workpiece initial_stock;
     
   QPushButton* add_tool_button;
   QPushButton* define_vice_button;

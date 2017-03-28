@@ -11,6 +11,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "parallel_dialog.h"
+#include "stock_dialog.h"
+#include "tool_page.h"
 
 #include <QHBoxLayout>
 #include <QFileDialog>
@@ -18,7 +21,7 @@
 using namespace gca;
 
 MainWindow::MainWindow(QWidget *parent)
-  : QMainWindow(parent) {
+  : QMainWindow(parent), initial_stock(-1, -1, -1, gca::ACETAL) {
 
   set_system_allocator(&alloc);
 
@@ -64,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(generate_plan_button, SIGNAL (released()), this, SLOT (generate_plan()));
   connect(add_tool_button, SIGNAL (released()), this, SLOT (add_tool()));
   connect(add_parallel_button, SIGNAL (released()), this, SLOT (add_parallel()));
+  connect(define_stock_button, SIGNAL (released()), this, SLOT (define_stock()));
   
   
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));
@@ -474,6 +478,16 @@ void MainWindow::add_tool() {
   }
 }
 
+void MainWindow::define_stock() {
+  StockDialog dialog;
+  if (dialog.exec()) {
+    initial_stock = dialog.defined_stock();
+    cout << "SD 1 = " << initial_stock.sides[0] << endl;
+    cout << "SD 2 = " << initial_stock.sides[1] << endl;
+    cout << "SD 3 = " << initial_stock.sides[2] << endl;
+  }
+}
+
 void MainWindow::add_parallel() {
   ParallelDialog dialog;
   if (dialog.exec()) {
@@ -490,7 +504,7 @@ void MainWindow::generate_plan() {
   //std::vector<plate_height> plates{0.1, 0.3, 0.7};
   fixtures fixes(test_vice, parallels);
 
-  workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
+  //workpiece workpiece_dims(5.0, 5.0, 5.0, ALUMINUM);
 
   // tool t1(0.25, 3.0, 4, HSS, FLAT_NOSE);
   // t1.set_cut_diameter(0.25);
@@ -544,7 +558,7 @@ void MainWindow::generate_plan() {
   cout << bounding << endl;
 
   fabrication_plan p =
-    make_fabrication_plan(part_mesh, fixes, toolset, {workpiece_dims});
+    make_fabrication_plan(part_mesh, fixes, toolset, {initial_stock});
 
   for (auto& step : p.steps()) {
 
