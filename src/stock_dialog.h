@@ -44,6 +44,18 @@ public:
     setLayout(layout);
   }
 
+  gca::material read_material() const {
+    if (aluminum_check->isChecked()) {
+      return gca::ALUMINUM;
+    }
+
+    if (brass_check->isChecked()) {
+      return gca::BRASS;
+    }
+
+    return gca::ACETAL;
+  }
+
   gca::workpiece defined_stock() const {
     std::string lstr = stock_length->text().toUtf8().constData();
     double l = std::stof(lstr);
@@ -54,7 +66,8 @@ public:
     std::string hstr = stock_height->text().toUtf8().constData();
     double h = std::stof(hstr);
 
-    return gca::workpiece(l, w, h, gca::ALUMINUM);
+    gca::material m = read_material();
+    return gca::workpiece(l, w, h, m);//gca::ALUMINUM);
   }
 
 private slots:

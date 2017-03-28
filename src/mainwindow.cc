@@ -485,6 +485,7 @@ void MainWindow::define_stock() {
     cout << "SD 1 = " << initial_stock.sides[0] << endl;
     cout << "SD 2 = " << initial_stock.sides[1] << endl;
     cout << "SD 3 = " << initial_stock.sides[2] << endl;
+    cout << "Mat  = " << initial_stock.stock_material << endl;
   }
 }
 
