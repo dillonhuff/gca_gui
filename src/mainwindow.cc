@@ -4,7 +4,6 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 
-#include "backend/gcode_generation.h"
 #include "geometry/vtk_utils.h"
 #include "geometry/vtk_debug.h"
 #include "synthesis/mesh_to_gcode.h"
@@ -490,10 +489,7 @@ void MainWindow::postprocess() {
   gcode_program prog =
     s.gcode_for_toolpaths(emco_f1_code_no_TLC);
 
-  stringstream strs;
-  strs << prog.blocks << endl;
-
-  GCodeDialog gc(strs.str());
+  GCodeDialog gc(prog);
   gc.exec();
 }
 
