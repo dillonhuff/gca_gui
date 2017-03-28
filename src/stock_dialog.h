@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGroupBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -11,10 +12,26 @@
 class StockDialog : public QDialog {
 public:
   StockDialog() {
+    stock_length_label = new QLabel("Length:");
+    stock_width_label = new QLabel("Width:");
+    stock_height_label = new QLabel("Height:");
+
     stock_length = new QLineEdit;
     stock_width = new QLineEdit;
     stock_height = new QLineEdit;
 
+    QHBoxLayout* stock_length_layout = new QHBoxLayout;
+    stock_length_layout->addWidget(stock_length_label);
+    stock_length_layout->addWidget(stock_length);
+
+    QHBoxLayout* stock_width_layout = new QHBoxLayout;
+    stock_width_layout->addWidget(stock_width_label);
+    stock_width_layout->addWidget(stock_width);
+
+    QHBoxLayout* stock_height_layout = new QHBoxLayout;
+    stock_height_layout->addWidget(stock_height_label);
+    stock_height_layout->addWidget(stock_height);
+    
     done_button = new QPushButton("Done", this);
 
     material_group = new QGroupBox();
@@ -35,9 +52,9 @@ public:
     connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
 
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(stock_length);
-    layout->addWidget(stock_width);
-    layout->addWidget(stock_height);
+    layout->addLayout(stock_length_layout);
+    layout->addLayout(stock_width_layout);
+    layout->addLayout(stock_height_layout);
     layout->addWidget(material_group);
     layout->addWidget(done_button);
 
@@ -73,6 +90,10 @@ public:
 private slots:
 
 private:
+  QLabel* stock_length_label;
+  QLabel* stock_width_label;
+  QLabel* stock_height_label;
+
   QLineEdit* stock_length;
   QLineEdit* stock_width;
   QLineEdit* stock_height;
