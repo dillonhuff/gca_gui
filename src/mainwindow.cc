@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(add_tool_button, SIGNAL (released()), this, SLOT (add_tool()));
   connect(add_parallel_button, SIGNAL (released()), this, SLOT (add_parallel()));
   connect(define_stock_button, SIGNAL (released()), this, SLOT (define_stock()));
+  connect(define_vice_button, SIGNAL (released()), this, SLOT (define_vice()));
   
   
   // connect(accept_button, SIGNAL (released()), this, SLOT (handle_accept()));

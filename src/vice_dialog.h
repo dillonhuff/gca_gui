@@ -1,6 +1,6 @@
 #pragma once
 
-namespace gca {
+
 
 #include <QGroupBox>
 #include <QLineEdit>
@@ -13,65 +13,59 @@ namespace gca {
 #include "backend/tool.h"
 #include "synthesis/vice.h"
 
-class ViceDialog : public QDialog {
-public:
-  ViceDialog() {
+namespace gca {
 
-    done_button = new QPushButton("Done", this);
+  class ViceDialog : public QDialog {
+  public:
+    ViceDialog() {
 
-    connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
+      done_button = new QPushButton("Done", this);
 
-    vice_group = new QGroupBox();
+      connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
 
-    emco_2in = new QRadioButton(tr("&Emco 2in"));
-    emco_6in = new QRadioButton(tr("&Emco 6in"));
+      vice_group = new QGroupBox();
 
-    emco_2in->setChecked(true);
+      emco_2in = new QRadioButton(tr("&Emco 2in"));
+      emco_6in = new QRadioButton(tr("&Emco 6in"));
 
-    QVBoxLayout *vbox = new QVBoxLayout;
-    vbox->addWidget(emco_2in);
-    vbox->addWidget(emco_6in);
-    vbox->addStretch(1);
-    vice_group->setLayout(vbox);
+      emco_2in->setChecked(true);
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(vice_group);
+      QVBoxLayout *vbox = new QVBoxLayout;
+      vbox->addWidget(emco_2in);
+      vbox->addWidget(emco_6in);
+      vbox->addStretch(1);
+      vice_group->setLayout(vbox);
 
-    layout->addWidget(done_button);
-    
-    setLayout(layout);
-  }
+      QVBoxLayout* layout = new QVBoxLayout;
+      layout->addWidget(vice_group);
 
-  gca::vice selected_vice() const {
-    if (emco_2in->isChecked()) {
-      vice test_v = current_setup();
-      vice test_vice = top_jaw_origin_vice(test_v);
-      return test_vice;
+      layout->addWidget(done_button);
+      setLayout(layout);
     }
 
-    vice test_v = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
+    gca::vice selected_vice() const {
+      if (emco_2in->isChecked()) {
+	vice test_v = current_setup();
+	vice test_vice = top_jaw_origin_vice(test_v);
+	return test_vice;
+      }
 
-    return top_jaw_origin_vice(test_v);
-  }
-  // gca::vice () const {
-  //   if (emco_2in->isChecked()) {
-  //     return ;
-  //   }
+      vice test_v = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
 
-  //   return gca::CARBIDE;
-  // }
+      return top_jaw_origin_vice(test_v);
+    }
   
-private slots:
+  private slots:
 
-private:
+  private:
 
-  QPushButton* done_button;
+    QPushButton* done_button;
 
-  QGroupBox* vice_group;
+    QGroupBox* vice_group;
 
-  QRadioButton* emco_2in;
-  QRadioButton* emco_6in;
+    QRadioButton* emco_2in;
+    QRadioButton* emco_6in;
   
-};
+  };
   
 }
