@@ -13,6 +13,7 @@
 #include "ui_mainwindow.h"
 #include "parallel_dialog.h"
 #include "stock_dialog.h"
+#include "vice_dialog.h"
 #include "tool_page.h"
 
 #include <QHBoxLayout>
@@ -410,40 +411,12 @@ MainWindow::MainWindow(QWidget *parent)
 //   return filletable;
 // }
 
-// bool is_finished(const filletable_part& part) {
-//   if (part.fillet_groups.size() == 0) { return true; }
-
-//   for (auto& f : part.fillet_groups) {
-//     if (f.possible_fillets.size() > 1) {
-//       return false;
-//     }
-//   }
-
-//   return true;
-// }
-
-// void MainWindow::add_to_filletables(const part_split& part) {
-//   vector<filletable_part> filletables =
-//     build_filletables(part);
-
-//   for (auto& f : filletables) {
-//     if (is_finished(f)) {
-//       finished_fillets.push_back(f);
-//     } else {
-//       in_progress_fillets.push_back(f);
-//     }
-//   }
-// }
-
-// void MainWindow::add_to_queues(const part_split& part) {
-//   //if (part.deep_features.size() > 0) {
-//     in_progress.push_back(part);
-//     //return;
-//     //}
-
-//     //add_to_filletables(part);
-
-// }
+void MainWindow::define_vice() {
+  ViceDialog dialog;
+  if (dialog.exec()) {
+    test_vice = dialog.selected_vice();
+  }
+}
 
 void MainWindow::load_stl() {
   QFileDialog dialog;

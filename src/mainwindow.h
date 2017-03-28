@@ -35,10 +35,7 @@ private slots:
   void add_tool();
   void add_parallel();
   void define_stock();
-
-  // void handle_accept();
-  // void handle_reject();
-  // void handle_set_done();
+  void define_vice();
 
 private:
 
