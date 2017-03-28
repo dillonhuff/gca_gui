@@ -561,13 +561,19 @@ void MainWindow::generate_plan() {
     auto vice_pd = polydata_for_vice(step.v);
     auto vice_actor = polydata_actor(vice_pd);
     renderer->AddActor(vice_actor);
-    
+
+    QPushButton* postprocess = new QPushButton("Postprocess");
     QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
+
+    QVBoxLayout* step_layout = new QVBoxLayout;
+    step_layout->addWidget(vtk_window);
+    step_layout->addWidget(postprocess);
+    
     vtk_window->GetRenderWindow()->AddRenderer(renderer);
     vtk_window->show();
     vtk_window->update();
     
-    vtk_layout->addWidget(vtk_window);
+    vtk_layout->addLayout(step_layout);
   }
 
 }
