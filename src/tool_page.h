@@ -1,7 +1,9 @@
 #pragma once
 
+#include <QGroupBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QVBoxLayout>
 #include <QWizardPage>
 #include <QDialog>
@@ -45,6 +47,19 @@ public:
 
     connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
 
+    material_group = new QGroupBox();
+
+    hss_check = new QRadioButton(tr("&HSS"));
+    carbide_check = new QRadioButton(tr("&Carbide"));
+
+    hss_check->setChecked(true);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(hss_check);
+    vbox->addWidget(carbide_check);
+    vbox->addStretch(1);
+    material_group->setLayout(vbox);
+    
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(tool_cut_diameter);
     layout->addWidget(tool_cut_length);
@@ -55,13 +70,23 @@ public:
     layout->addWidget(tool_holder_diameter);
     layout->addWidget(tool_holder_length);
 
+    layout->addWidget(material_group);
+
     layout->addWidget(done_button);
     
     setLayout(layout);
   }
 
+  gca::material read_material() const {
+    if (hss_check->isChecked()) {
+      return gca::HSS;
+    }
+
+    return gca::CARBIDE;
+  }
+  
   gca::tool defined_tool() const {
-    gca::tool t4{1.5, 3.94, 4, gca::HSS, gca::FLAT_NOSE};
+    gca::tool t4{1.5, 3.94, 4, read_material(), gca::FLAT_NOSE};
 
     std::string fstr = tool_cut_diameter->text().toUtf8().constData();
     t4.set_cut_diameter(std::stof(fstr));
@@ -91,6 +116,11 @@ private:
   QLineEdit* tool_holder_length;
 
   QPushButton* done_button;
+
+  QGroupBox* material_group;
+
+  QRadioButton* hss_check;
+  QRadioButton* carbide_check;
   
 };
 

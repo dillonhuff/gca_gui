@@ -21,7 +21,7 @@ public:
 
     aluminum_check = new QRadioButton(tr("&Aluminum"));
     brass_check = new QRadioButton(tr("&Brass"));
-    acetal_check = new QRadioButton(tr("R&Acetal"));
+    acetal_check = new QRadioButton(tr("&Acetal"));
 
     aluminum_check->setChecked(true);
 
