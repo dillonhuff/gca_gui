@@ -1,10 +1,12 @@
 #pragma once
 
+#include <QGroupBox>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWizardPage>
 #include <QDialog>
+#include <QRadioButton>
 
 class StockDialog : public QDialog {
 public:
@@ -15,14 +17,29 @@ public:
 
     done_button = new QPushButton("Done", this);
 
+    material_group = new QGroupBox();
+
+    QRadioButton *radio1 = new QRadioButton(tr("&Aluminum"));
+    QRadioButton *radio2 = new QRadioButton(tr("R&Brass"));
+    QRadioButton *radio3 = new QRadioButton(tr("Ra&Acetal"));
+
+    radio1->setChecked(true);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(radio1);
+    vbox->addWidget(radio2);
+    vbox->addWidget(radio3);
+    vbox->addStretch(1);
+    material_group->setLayout(vbox);
+
     connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(stock_length);
     layout->addWidget(stock_width);
     layout->addWidget(stock_height);
-
     layout->addWidget(done_button);
+    layout->addWidget(material_group);
     
     setLayout(layout);
   }
@@ -48,6 +65,8 @@ private:
   QLineEdit* stock_height;
 
   QPushButton* done_button;
+
+  QGroupBox* material_group;
   
 };
 
