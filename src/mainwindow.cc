@@ -469,6 +469,7 @@ void MainWindow::add_tool() {
     toolset.push_back(tool);
 
     cout << "Selected tool cut diam = " << tool.cut_diameter() << endl;
+    cout << "Number of tools = " << toolset.size() << endl;
   }
 }
 

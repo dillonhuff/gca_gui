@@ -44,7 +44,7 @@ public:
     done_button = new QPushButton("Done", this);
 
     connect(done_button, SIGNAL(clicked()), this, SLOT(accept()));
-    
+
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(tool_cut_diameter);
     layout->addWidget(tool_cut_length);
@@ -62,9 +62,12 @@ public:
 
   gca::tool defined_tool() const {
     gca::tool t4{1.5, 3.94, 4, gca::HSS, gca::FLAT_NOSE};
+
     std::string fstr = tool_cut_diameter->text().toUtf8().constData();
-    t4.set_cut_diameter(std::stoi(fstr));
-    t4.set_cut_length(2.2);
+    t4.set_cut_diameter(std::stof(fstr));
+
+    std::string cut_str = tool_cut_diameter->text().toUtf8().constData();
+    t4.set_cut_length(std::stof(cut_str));
 
     t4.set_shank_diameter(0.5);
     t4.set_shank_length(0.05);
