@@ -13,6 +13,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "parallel_dialog.h"
+#include "postprocess_button.h"
 #include "stock_dialog.h"
 #include "vice_dialog.h"
 #include "tool_page.h"
@@ -477,6 +478,10 @@ void MainWindow::add_parallel() {
   }
 }
 
+void MainWindow::postprocess(unsigned step_num) {
+  
+}
+
 void MainWindow::generate_plan() {
   //vice test_vice = custom_jaw_vice(6.0, 1.5, 10.0, point(0.0, 0.0, 0.0));
   //std::vector<plate_height> plates{0.1, 0.3, 0.7};
@@ -538,6 +543,7 @@ void MainWindow::generate_plan() {
   fabrication_plan p =
     make_fabrication_plan(part_mesh, fixes, toolset, {initial_stock});
 
+  unsigned step_num = 0;
   for (auto& step : p.steps()) {
 
     auto mesh_pd =
@@ -562,12 +568,20 @@ void MainWindow::generate_plan() {
     auto vice_actor = polydata_actor(vice_pd);
     renderer->AddActor(vice_actor);
 
-    QPushButton* postprocess = new QPushButton("Postprocess");
+    PostProcessButton* postprocess_button =
+      new PostProcessButton("Postprocess", step_num);
+    connect(postprocess_button,
+    	    SIGNAL (released()),
+    	    this,
+    	    SLOT(postprocess));
+
+    step_num++;
+
     QVTKWidget* vtk_window = new QVTKWidget(this, Qt::Widget);
 
     QVBoxLayout* step_layout = new QVBoxLayout;
     step_layout->addWidget(vtk_window);
-    step_layout->addWidget(postprocess);
+    step_layout->addWidget(postprocess_button);
     
     vtk_window->GetRenderWindow()->AddRenderer(renderer);
     vtk_window->show();

@@ -36,6 +36,7 @@ private slots:
   void add_parallel();
   void define_stock();
   void define_vice();
+  void postprocess(unsigned step_num);
 
 private:
 
