@@ -1,4 +1,5 @@
 #include <vtkSphereSource.h>
+#include <vtkProperty.h>
 #include <vtkRendererCollection.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
@@ -559,15 +560,27 @@ void MainWindow::generate_plan() {
   unsigned step_num = 0;
   for (auto& step : current_plan.steps()) {
 
-    auto mesh_pd =
-      polydata_for_trimesh(step.arrangement().mesh("part"));
-    color_polydata(mesh_pd, 0, 255, 0);
-    auto mesh_actor = polydata_actor(mesh_pd);
+    // auto mesh_pd =
+    //   polydata_for_trimesh(step.arrangement().mesh("part"));
+    // color_polydata(mesh_pd, 0, 255, 0);
+    // auto mesh_actor = polydata_actor(mesh_pd);
   
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->SetBackground(1, 1, 1);
 
-    renderer->AddActor(mesh_actor);
+    auto a = step.arrangement();
+    for (auto n : a.mesh_names()) {
+      if (a.metadata(n).display_during_debugging) {
+	auto other_pd = polydata_for_trimesh(a.mesh(n));
+	auto other_actor = polydata_actor(other_pd);
+
+	if (n == "part") {
+	  other_actor->GetProperty()->SetOpacity(0.5);
+	}
+
+	renderer->AddActor(other_actor);
+      }
+    }
 
     color white(255, 255, 255);
     for (auto& tp : step.toolpaths()) {
