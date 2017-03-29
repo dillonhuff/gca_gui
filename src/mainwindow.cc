@@ -1,3 +1,4 @@
+#include <vtkAxesActor.h>
 #include <vtkSphereSource.h>
 #include <vtkProperty.h>
 #include <vtkRendererCollection.h>
@@ -568,6 +569,11 @@ void MainWindow::generate_plan() {
     auto renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->SetBackground(1, 1, 1);
 
+    vtkSmartPointer<vtkAxesActor> axes =
+      vtkSmartPointer<vtkAxesActor>::New();
+
+    renderer->AddActor(axes);
+    
     auto a = step.arrangement();
     for (auto n : a.mesh_names()) {
       if (a.metadata(n).display_during_debugging) {
