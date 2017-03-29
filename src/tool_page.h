@@ -136,14 +136,26 @@ public:
     std::string fstr = tool_cut_diameter->text().toUtf8().constData();
     t4.set_cut_diameter(std::stof(fstr));
 
-    std::string cut_str = tool_cut_diameter->text().toUtf8().constData();
+    std::string cut_str = tool_cut_length->text().toUtf8().constData();
     t4.set_cut_length(std::stof(cut_str));
 
-    t4.set_shank_diameter(0.5);
-    t4.set_shank_length(0.05);
+    fstr = tool_shank_diameter->text().toUtf8().constData();
+    t4.set_shank_diameter(std::stof(fstr));
 
-    t4.set_holder_diameter(2.5);
-    t4.set_holder_length(3.5);
+    cut_str = tool_shank_length->text().toUtf8().constData();
+    t4.set_shank_length(std::stof(cut_str));
+
+    fstr = tool_holder_diameter->text().toUtf8().constData();
+    t4.set_holder_diameter(std::stof(fstr));
+
+    cut_str = tool_holder_length->text().toUtf8().constData();
+    t4.set_holder_length(std::stof(cut_str));
+    
+    // t4.set_shank_diameter(0.5);
+    // t4.set_shank_length(0.05);
+
+    // t4.set_holder_diameter(2.5);
+    // t4.set_holder_length(3.5);
 
     return t4;
   }
